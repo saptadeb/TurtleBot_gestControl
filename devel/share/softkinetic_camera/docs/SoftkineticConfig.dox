@@ -1,0 +1,30 @@
+\subsubsection parameters ROS parameters
+
+Reads and maintains the following parameters on the ROS server
+
+- \b "~camera_link" : \b [str] Camera optical frame min: , default: base_rgbd_camera_optical_frame, max: 
+- \b "~confidence_threshold" : \b [int] Confidence threshold min: 0, default: 200, max: 2000
+- \b "~use_voxel_grid_filter" : \b [bool] Enable downsampling (voxel grid) filter min: False, default: False, max: True
+- \b "~voxel_grid_size" : \b [double] Voxel grid size min: 0.0, default: 0.01, max: 0.1
+- \b "~use_radius_outlier_filter" : \b [bool] Enable radius outlier removal filter min: False, default: False, max: True
+- \b "~search_radius" : \b [double] Search radius min: 0.0, default: 0.05, max: 0.1
+- \b "~min_neighbours" : \b [int] Minimum number of neightbours within the search radius min: 1, default: 50, max: 500
+- \b "~use_passthrough_filter" : \b [bool] Enable passthrough filter min: False, default: False, max: True
+- \b "~limit_min" : \b [double] Limit minimum value min: 0.0, default: 0.01, max: 1.0
+- \b "~limit_max" : \b [double] Limit maximum value min: 0.0, default: 10.0, max: 10.0
+- \b "~use_frustum_culling_filter" : \b [bool] Enable frustum culling filter min: False, default: False, max: True
+- \b "~hfov" : \b [double] Horizontal FOV (degrees) min: 0.0, default: 90.0, max: 180.0
+- \b "~vfov" : \b [double] Vertical FOV (degrees) min: 0.0, default: 90.0, max: 180.0
+- \b "~near_plane" : \b [double] Near plane min: 0.0, default: 0.01, max: 1.0
+- \b "~far_plane" : \b [double] Far plane min: 0.0, default: 10.0, max: 10.0
+- \b "~use_serial" : \b [bool] Enable serial number identification min: False, default: False, max: True
+- \b "~serial" : \b [str] Camera serial number min: , default: , max: 
+- \b "~enable_depth" : \b [bool] Enable depth min: False, default: True, max: True
+- \b "~depth_mode" : \b [str] Depth mode min: , default: close, max: 
+- \b "~depth_frame_format" : \b [str] Depth frame format min: , default: QQVGA, max: 
+- \b "~depth_frame_rate" : \b [int] Depth frame rate min: 25, default: 30, max: 60
+- \b "~enable_color" : \b [bool] Enable color min: False, default: True, max: True
+- \b "~color_compression" : \b [str] Color compression min: , default: MJPEG, max: 
+- \b "~color_frame_format" : \b [str] Color frame format min: , default: VGA, max: 
+- \b "~color_frame_rate" : \b [int] Color frame rate min: 30, default: 30, max: 30
+
