@@ -1,2 +1,0 @@
-fullpkg:softkinetic/softkinetic:softkinetic/softkinetic_camera
--DCATKIN_DEVEL_PREFIX=/home/sapta/ws/devel -DCMAKE_INSTALL_PREFIX=/home/sapta/ws/install -G Unix Makefiles

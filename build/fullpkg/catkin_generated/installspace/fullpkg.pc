@@ -1,8 +1,0 @@
-prefix=/home/sapta/ws/install
-
-Name: fullpkg
-Description: Description of fullpkg
-Version: 0.0.0
-Cflags: 
-Libs: -L/home/sapta/ws/install/lib 
-Requires: 

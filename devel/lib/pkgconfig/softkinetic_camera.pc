@@ -1,8 +1,0 @@
-prefix=/home/sapta/ws/devel
-
-Name: softkinetic_camera
-Description: Description of softkinetic_camera
-Version: 0.6.2
-Cflags: -I/home/sapta/ws/devel/include
-Libs: -L/home/sapta/ws/devel/lib 
-Requires: roscpp std_msgs pcl_ros cv_bridge image_transport camera_info_manager message_runtime dynamic_reconfigure
