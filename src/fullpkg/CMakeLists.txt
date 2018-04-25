@@ -8,10 +8,17 @@ find_package(catkin REQUIRED COMPONENTS
   rospy
   std_msgs
   sensor_msgs
+  pcl_conversions
+  pcl_ros
+  std_srvs
 )
 
+find_package(PCL REQUIRED COMPONENTS
+  common
+  features
+)
 catkin_package(CATKIN_DEPENDS 
-	sensor_msgs
+	common_msgs_srvs roscpp sensor_msgs std_srvs
 )
 
 set (CMAKE_CXX_STANDARD 11)
