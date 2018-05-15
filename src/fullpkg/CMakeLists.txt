@@ -11,6 +11,7 @@ find_package(catkin REQUIRED COMPONENTS
   pcl_conversions
   pcl_ros
   std_srvs
+  message_generation
 )
 
 find_package(PCL REQUIRED COMPONENTS

@@ -21,50 +21,55 @@
 #include <pcl/io/io.h>
 #include <pcl/io/pcd_io.h>
 #include <string>
-#include <stdio.h>      /* printf, fgets */
+#include <stdio.h>     
 #include <stdlib.h>  
+
+#include <vector>
+#include "std_msgs/MultiArrayLayout.h"
+#include "std_msgs/MultiArrayDimension.h"
+#include "std_msgs/Float32MultiArray.h"
+#include "std_msgs/Int32MultiArray.h"
+
 template class PFHShapeReco<pcl::PointXYZ>;
 
-ros::Publisher pub;
+ros::Publisher hist;
 
 void cloud_cb(const boost::shared_ptr<const sensor_msgs::PointCloud2>& input){
-
+    ROS_INFO("callback");
     pcl::PCLPointCloud2 pcl_pc2;
     pcl_conversions::toPCL(*input,pcl_pc2);
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
     pcl::fromPCLPointCloud2(pcl_pc2,*cloud);
-    if(cloud->size() > 300) {//Mindestgröße der PC zur Berechnung des Deskriptors
-
+    if(cloud->size() > 300) {
+        ROS_INFO("if loop");
         pcl::search::KdTree<pcl::PointXYZ>::Ptr kdtree (new pcl::search::KdTree<pcl::PointXYZ>);
-
+        ROS_INFO("1");
         pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimation; 
+        ROS_INFO("2");
         normal_estimation.setInputCloud (cloud);
+        ROS_INFO("3");
         normal_estimation.setSearchMethod (kdtree);
+        ROS_INFO("4");
         pcl::PointCloud<pcl::Normal>::Ptr normals (new pcl::PointCloud< pcl::Normal>);
-        normal_estimation.setRadiusSearch (0.03);//_normalRadius muss angepasst werden!
+        ROS_INFO("5");
+        normal_estimation.setRadiusSearch (0.03);
+        ROS_INFO("6");
         normal_estimation.compute (*normals);
-
+        ROS_INFO("7");
         PFHShapeReco<pcl::PointXYZ> pfh;
-        pfh.ComputePFH(0.5, cloud, normals);//Berechnung des Deskriptors 
-        for(int i = 0; i < 625; i++){//_histSize muss auf 625 gesetzt werden für diesen Deskriptor
-            float f = pfh.GetObjectModel()[i];//Extraktion und Schreiben jedes Wertes in eine Datei
+        ROS_INFO("8");
+        pfh.ComputePFH(0.5, cloud, normals);
+        ROS_INFO("9");
+        std_msgs::Float32MultiArray arr;
+        for(int i = 0; i < 625; i++){
+            float f = pfh.GetObjectModel()[i];
+            arr.data.push_back(f);
         }
-    //do stuff with temp_cloud here
+        hist.publish (arr);
     }
 }
 
-  // Create a container for the data.
-  //sensor_msgs::PointCloud2 output;
-
-  // Do data processing here...
-  //output = *cld;
-
-  // Publish the data.
-  //pub.publish (output);
-
-
-int
-main (int argc, char** argv)
+int main (int argc, char** argv)
 {
   // Initialize ROS
   ros::init (argc, argv, "tc");
@@ -74,7 +79,9 @@ main (int argc, char** argv)
   ros::Subscriber sub = nh.subscribe ("/softkinetic_camera/depth/points", 1, cloud_cb);
 
   // Create a ROS publisher for the output point cloud
-  pub = nh.advertise<sensor_msgs::PointCloud2> ("output", 1);
+
+  hist = nh.advertise<std_msgs::Float32MultiArray>("arr", 10);
+  //cld = nh.advertise<sensor_msgs::PointCloud2>("output", 1);
 
   // Spin
   ros::spin ();
