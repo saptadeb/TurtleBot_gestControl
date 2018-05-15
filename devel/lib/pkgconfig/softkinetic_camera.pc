@@ -1,8 +1,0 @@
-prefix=/home/fdai5587/ws/devel
-
-Name: softkinetic_camera
-Description: Description of softkinetic_camera
-Version: 0.6.2
-Cflags: -I/home/fdai5587/ws/devel/include
-Libs: -L/home/fdai5587/ws/devel/lib 
-Requires: roscpp std_msgs pcl_ros cv_bridge image_transport camera_info_manager message_runtime dynamic_reconfigure
