@@ -10,6 +10,7 @@
 #include <pcl/PCLPointCloud2.h>
 #include <pcl/conversions.h>
 #include <pcl_ros/transforms.h>
+#include <pcl/filters/voxel_grid.h>
 #include "pfh_shape_reco.h"
 #include "math.h"
 #include <chrono>
@@ -30,43 +31,54 @@
 #include "std_msgs/Float32MultiArray.h"
 #include "std_msgs/Int32MultiArray.h"
 
+#include "fullpkg/mesg.h"
+
 template class PFHShapeReco<pcl::PointXYZ>;
 
 ros::Publisher hist;
 
+//fullpkg::mesg msg;
+std_msgs::Float32MultiArray msg;
+
+
 void cloud_cb(const boost::shared_ptr<const sensor_msgs::PointCloud2>& input){
-    ROS_INFO("callback");
+    //ROS_INFO("callback");
     pcl::PCLPointCloud2 pcl_pc2;
     pcl_conversions::toPCL(*input,pcl_pc2);
     pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::PointCloud<pcl::PointXYZ>::Ptr smallcloud(new pcl::PointCloud<pcl::PointXYZ>);
+    pcl::VoxelGrid<pcl::PointXYZ> voxel_grid;
     pcl::fromPCLPointCloud2(pcl_pc2,*cloud);
-    if(cloud->size() > 300) {
-        ROS_INFO("if loop");
+    voxel_grid.setInputCloud (cloud);
+    voxel_grid.setLeafSize (0.01, 0.01, 0.01);
+    voxel_grid.filter(*smallcloud); 
+    msg.data.clear();
+    if(cloud->size() > 300) {        
+        //ROS_INFO("cloud size %d", smallcloud->size());
         pcl::search::KdTree<pcl::PointXYZ>::Ptr kdtree (new pcl::search::KdTree<pcl::PointXYZ>);
-        ROS_INFO("1");
         pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimation; 
-        ROS_INFO("2");
-        normal_estimation.setInputCloud (cloud);
-        ROS_INFO("3");
+        normal_estimation.setInputCloud (smallcloud);
         normal_estimation.setSearchMethod (kdtree);
-        ROS_INFO("4");
         pcl::PointCloud<pcl::Normal>::Ptr normals (new pcl::PointCloud< pcl::Normal>);
-        ROS_INFO("5");
-        normal_estimation.setRadiusSearch (0.03);
-        ROS_INFO("6");
+        normal_estimation.setRadiusSearch (0.03);  // maybe bigger?
         normal_estimation.compute (*normals);
-        ROS_INFO("7");
         PFHShapeReco<pcl::PointXYZ> pfh;
-        ROS_INFO("8");
-        pfh.ComputePFH(0.5, cloud, normals);
-        ROS_INFO("9");
-        std_msgs::Float32MultiArray arr;
+        pfh.ComputePFH(0.5, smallcloud, normals);
+        std::vector<long double> arr; 
+        long double f = 0;
         for(int i = 0; i < 625; i++){
-            float f = pfh.GetObjectModel()[i];
-            arr.data.push_back(f);
+            f = pfh.GetObjectModel()[i];
+            arr.push_back(f);
         }
-        hist.publish (arr);
-    }
+        std::vector<long double>::const_iterator itr, end(arr.end());
+        for(itr = arr.begin(); itr!= end; ++itr) {
+            //cout<<*itr<<endl;
+          msg.data.push_back(*itr); 
+        }
+        //msg.data.insert(msg.data.end(), arr.begin(), arr.end());
+        hist.publish (msg);
+        //ROS_INFO("arr size");
+    }  
 }
 
 int main (int argc, char** argv)
@@ -75,12 +87,19 @@ int main (int argc, char** argv)
   ros::init (argc, argv, "tc");
   ros::NodeHandle nh;
 
+  msg.layout.dim.push_back(std_msgs::MultiArrayDimension());
+  msg.layout.dim[0].size = 625;
+  msg.layout.dim[0].stride = 1;
+  msg.layout.dim[0].label = "x"; // or whatever name you typically use to index vec1
+
   // Create a ROS subscriber for the input point cloud
   ros::Subscriber sub = nh.subscribe ("/softkinetic_camera/depth/points", 1, cloud_cb);
 
   // Create a ROS publisher for the output point cloud
 
+
   hist = nh.advertise<std_msgs::Float32MultiArray>("arr", 10);
+  //hist = nh.advertise<fullpkg::mesg>("arr", 10);
   //cld = nh.advertise<sensor_msgs::PointCloud2>("output", 1);
 
   // Spin

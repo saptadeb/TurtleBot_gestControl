@@ -14,12 +14,22 @@ find_package(catkin REQUIRED COMPONENTS
   message_generation
 )
 
+add_message_files(
+  FILES
+  mesg.msg
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
+
 find_package(PCL REQUIRED COMPONENTS
   common
   features
 )
 catkin_package(CATKIN_DEPENDS 
-	common_msgs_srvs roscpp sensor_msgs std_srvs
+	common_msgs_srvs roscpp rospy std_msgs sensor_msgs std_srvs message_runtime 
 )
 
 set (CMAKE_CXX_STANDARD 11)
@@ -36,3 +46,4 @@ link_directories(${PCL_LIBRARY_DIRS})
 add_definitions(${PCL_DEFINITIONS})
 add_executable(tc src/tc.cpp)
 target_link_libraries(tc ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES})
+add_dependencies(tc ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})

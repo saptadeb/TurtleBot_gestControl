@@ -1,0 +1,2 @@
+fullpkg:softkinetic:softkinetic_camera
+-DCATKIN_DEVEL_PREFIX=/home/fdai5587/ws/devel -DCMAKE_INSTALL_PREFIX=/home/fdai5587/ws/install -G Unix Makefiles
