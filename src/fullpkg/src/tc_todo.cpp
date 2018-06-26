@@ -40,6 +40,9 @@ ros::Publisher hist;
 
 std_msgs::Float32MultiArray msg;
 
+Eigen::Vector4f minPoint;
+Eigen::Vector4f maxPoint;
+
 void cloud_cb(const boost::shared_ptr<const sensor_msgs::PointCloud2>& input){
     //ROS_INFO("callback");
     pcl::PCLPointCloud2 pcl_pc2;
@@ -54,13 +57,20 @@ void cloud_cb(const boost::shared_ptr<const sensor_msgs::PointCloud2>& input){
     voxel_grid.setLeafSize (0.01, 0.01, 0.01);
     voxel_grid.filter(*smallcloud); 
 
+    pcl::CropBox<pcl::PointXYZ> boxFilter;
+    pcl::CropBox<pcl::PointT> boxfilter(true);
+    boxFilter.setMin(minPoint);
+    boxFilter.setMax(maxPoint);
+    boxFilter.setInputCloud(smallcloud);
+    boxFilter.filter(*boxcloud);
+
     msg.data.clear();
     if(cloud->size() > 300) {        
         ROS_INFO("small cloud size %lu", smallcloud->size());
         ROS_INFO("boxcloud size %lu", boxcloud->size());
         pcl::search::KdTree<pcl::PointXYZ>::Ptr kdtree (new pcl::search::KdTree<pcl::PointXYZ>);
         pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimation; 
-        normal_estimation.setInputCloud (smallcloud);
+        normal_estimation.setInputCloud (boxcloud);
         normal_estimation.setSearchMethod (kdtree);
         pcl::PointCloud<pcl::Normal>::Ptr normals (new pcl::PointCloud< pcl::Normal>);
         normal_estimation.setRadiusSearch (0.03);  // maybe bigger?
@@ -84,6 +94,15 @@ void cloud_cb(const boost::shared_ptr<const sensor_msgs::PointCloud2>& input){
 
 int main (int argc, char** argv)
 {
+  minPoint[0]=10;  // define minimum point x
+  minPoint[1]=10;  // define minimum point y
+  minPoint[2]=10;  // define minimum point z
+  minPoint[0]=20;  // define max point x
+  minPoint[1]=20;  // define max point y
+  minPoint[2]=20;  // define max point z 
+
+
+
   ros::init (argc, argv, "tc");
   ros::NodeHandle nh;
 

@@ -27,6 +27,9 @@ generate_messages(
 find_package(PCL REQUIRED COMPONENTS
   common
   features
+  io 
+  common
+  visualization
 )
 catkin_package(CATKIN_DEPENDS 
 	common_msgs_srvs roscpp rospy std_msgs sensor_msgs std_srvs message_runtime 
@@ -47,3 +50,8 @@ add_definitions(${PCL_DEFINITIONS})
 add_executable(tc src/tc.cpp)
 target_link_libraries(tc ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES})
 add_dependencies(tc ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
+add_executable(rns src/rns.cpp)
+target_link_libraries(rns ${catkin_LIBRARIES} ${PCL_COMMON_LIBRARIES} ${PCL_IO_LIBRARIES})
+add_dependencies(rns ${${PROJECT_NAME}_EXPORTED_TARGETS} ${catkin_EXPORTED_TARGETS})
+
