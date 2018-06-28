@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<!--
+Demo launch file to run single softkinetic camera in stand alone (no other /tf) setup with Rviz
+The arguments given are the device indices of the cameras determined by the DepthSense deamon.
+-->
+
+<launch>
+
+  <node name="cv" pkg="fullpkg" type="cv" output="screen" />
+
+</launch>

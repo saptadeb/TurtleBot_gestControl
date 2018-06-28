@@ -92,7 +92,7 @@ int main (int argc, char** argv)
   msg.layout.dim[0].stride = 1;
   msg.layout.dim[0].label = "x"; 
 
-  ros::Subscriber sub = nh.subscribe ("/softkinetic_camera/depth/points", 1, cloud_cb);
+  ros::Subscriber sub = nh.subscribe ("/softkinetic_camera/depth/points", 1000, cloud_cb);
 
   hist = nh.advertise<std_msgs::Float32MultiArray>("arr", 10);
 

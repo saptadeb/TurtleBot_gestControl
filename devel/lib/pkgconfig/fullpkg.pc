@@ -1,0 +1,8 @@
+prefix=/home/fdai5587/ws/devel
+
+Name: fullpkg
+Description: Description of fullpkg
+Version: 0.0.0
+Cflags: -I/home/fdai5587/ws/devel/include
+Libs: -L/home/fdai5587/ws/devel/lib 
+Requires: common_msgs_srvs roscpp rospy std_msgs sensor_msgs std_srvs message_runtime

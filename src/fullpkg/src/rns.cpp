@@ -39,6 +39,10 @@ conditional filtering on z axis (understnading the different axes)
 write a readme
 */
 
+string ans;
+int s=0, fc=0, flag=0, nframes=100;
+int pn=0, gc=0, tn=0;
+pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
 string hme = "/home/fdai5587/ws/testdata";
 
 template <typename T>
@@ -49,120 +53,113 @@ string ntos(T pNumber){
 }
 
 void maked(string d, int n){
-  	string ds = d + ntos(n);
-  	const char * dsc = ds.c_str();
-  	int dsd = mkdir(dsc, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+    string ds = d + ntos(n);
+    const char * dsc = ds.c_str();
+    int dsd = mkdir(dsc, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
 }
 
 void tohome(){
-	int dd;
-	const char * hh = hme.c_str();
-  	dd = chdir(hh);
+  int dd;
+  const char * hh = hme.c_str();
+  dd = chdir(hh);
 }
 
 void dir(int a, int b, int c){
-  	maked ("p", a);
-  	string s = hme + "/p" + ntos(a);
-  	const char * cs = s.c_str();
-  	int dd;
-  	dd = chdir(cs);  
-  	//char the_path[256];
-  	//getcwd(the_path, 255);
-  	//cout<< the_path<<endl;
+    maked ("p", a);
+    string s = hme + "/p" + ntos(a);
+    const char * cs = s.c_str();
+    int dd;
+    dd = chdir(cs);  
+    //char the_path[256];
+    //getcwd(the_path, 255);
+    //cout<< the_path<<endl;
 
-  	maked ("g", b);
-  	string s1 = s + "/g" + ntos(b);
-  	const char * cs1 = s1.c_str();
-  	dd = chdir(cs1);
-  	//getcwd(the_path, 255);
-  	//cout<< the_path<<endl;
+    maked ("g", b);
+    string s1 = s + "/g" + ntos(b);
+    const char * cs1 = s1.c_str();
+    dd = chdir(cs1);
+    //getcwd(the_path, 255);
+    //cout<< the_path<<endl;
 
-  	maked ("t", c);
-  	string s2 = s1 + "/t" + ntos(c);
-  	const char * cs2 = s2.c_str();
-  	dd = chdir(cs2);
-  	//getcwd(the_path, 255);
-  	//cout<< the_path<<endl;
+    maked ("t", c);
+    string s2 = s1 + "/t" + ntos(c);
+    const char * cs2 = s2.c_str();
+    dd = chdir(cs2);
+    //getcwd(the_path, 255);
+    //cout<< the_path<<endl;
 }
 
-void save(int c, const boost::shared_ptr<const sensor_msgs::PointCloud2>& input){
-	pcl::PCLPointCloud2 pcl_pc2;
+int startpage(){
+  cout << "Do you want to start a new recording? (yes/no): ";
+  getline (cin, ans);
+  if (ans == "yes"){
+    cout << "------------------------------------------------\n";
+    cout << "Enter person number (1-10): "; 
+    cin >> pn;
+    cout << "Enter gesture class (1-4): "; 
+    cin >> gc;
+    cout << "Enter try number (1-10): "; 
+    cin >> tn;
+    //make and change directory
+    dir(pn,gc,tn);
+    fc+=1;
+  }else if (ans == "no"){
+    cout << "------------------------------------------------\n";
+    cout << "ok Byee!\n";
+    cout << "------------------------------------------------\n";
+    s=1;
+  }else {
+    cout << "Enter 'yes' or 'no' (case sensitive).\n";
+  }
+}
+
+void cldcb(const boost::shared_ptr<const sensor_msgs::PointCloud2>& input){
+  //cout<<"to save"<<endl;
+  if (fc==0){
+    startpage();
+  }
+  else if (fc>0 && fc<=40){
+    pcl::PCLPointCloud2 pcl_pc2;
     pcl_conversions::toPCL(*input,pcl_pc2);
-    pcl::PointCloud<pcl::PointXYZ>::Ptr cloud(new pcl::PointCloud<pcl::PointXYZ>);
     pcl::fromPCLPointCloud2(pcl_pc2,*cloud);
+    
+    string pth = ntos(fc) + ".pcd";
 
-	string pth = ntos(c) + ".pcd";
-    const char * pch = pth.c_str();
-
-	pcl::io::savePCDFileASCII (pth, *cloud);
-  	//cout << "Saved " << cloud.points.size() << " data points to "<<cc<<".pcd.\n";
-	//frame to pcd -- saving format -- p_person number_gesture class_try number_frame number(counter) 
-}
-
-void record(int p, int g, int t, const boost::shared_ptr<const sensor_msgs::PointCloud2>& input){
-  	//p = person number, g = gesture class, t = try number
-  	//start the timer 
-  	//time_t now = time(0);
-  	//frame counter set to zero
-    int fc=0;
-  	//while (timer<=2 secs and counter <=40)
-    cout<<"------------------------------------------------\n";
-    while (fc<=40){
-      	float per = (fc*100.0)/40;
-    	//print recording ---- (counter*100)/40 --- percent done
-      	cout << "Recording now " << per << " percent done.\n";
-    	//function save   
-    	save (fc, input);
-    	//counter ++
-      	fc+=1;           
-    } 
-  	//print person number gesture class try_number done.. 
+    pcl::io::savePCDFileASCII (pth, *cloud);
+    float per = (fc*100.0)/40;
+    //print recording ---- (counter*100)/40 --- percent done
+    cout << "Recording now " << per << " percent done.\n";
+    fc+=1;
+  }
+  else {
+    fc=0;
+    
     cout << "------------------------------------------------\n";
-    cout << "Recording done for->\nPerson: "<< p << "\nGesture Class: " << g << "\nAttempt: " << t << "\n";
-    cout << "------------------------------------------------\n";
-}
+    cout << "Recording done for->\nPerson: "<< pn << "\nGesture Class: " << gc << "\nAttempt: " << tn << "\n";
+    cout << "------------------------------------------------\n";    
 
-
-void cloud_cb(const boost::shared_ptr<const sensor_msgs::PointCloud2>& input){
-	int dec = 1;
-    while (dec == 1) {
-    	string ans;
-    	int pn, gc, tn;
-    	//cout << "------------------------------------------------\n";
-    	cout << "Do you want to start a new recording? (yes/no): ";
-    	getline (cin, ans);
-    	if (ans == "yes"){
-        	cout << "------------------------------------------------\n";
-        	cout << "Enter person number (1-10): "; 
-        	cin >> pn;
-        	cout << "Enter gesture class (1-4): "; 
-        	cin >> gc;
-        	cout << "Enter try number (1-10): "; 
-        	cin >> tn;
-    		//make and change directory
-    		dir(pn,gc,tn);
-        	//record
-        	record(pn,gc,tn,input);
-      	}else if (ans == "no"){
-        	cout << "------------------------------------------------\n";
-        	cout << "ok Byee!\n";
-        	cout << "------------------------------------------------\n";
-        	ros::shutdown();
-          dec=0;
-      	}else {
-        	cout << "Enter 'yes' or 'no' (case sensitive).\n";
-    	}
-    	//change to home directory
-    	tohome();
-  	}
+    tohome();
+  }
 }
 
 int main (int argc, char** argv){
+  //cout<<flag<<endl;
   ros::init (argc, argv, "rns");
   ros::NodeHandle nh;
+  ros::Subscriber sub = nh.subscribe ("/softkinetic_camera/depth/points", 1000, cldcb);
+  if (s==1)
+  {
+    ros::shutdown();
+  }
+  //cout<<flag<<endl;
+  //flag=0;
+  //cout<<flag<<endl;
+  //int dec = 1;
+  //string ans;
+  //int pn, gc, tn;
 
-  //subscriber to callback
-  ros::Subscriber sub = nh.subscribe ("/softkinetic_camera/depth/points", 1, cloud_cb);
 
   ros::spin ();
+
+
 }
