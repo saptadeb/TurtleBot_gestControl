@@ -4,8 +4,6 @@ changes in
 
 
 
-
-
 #####
 
 run the following commands
@@ -17,6 +15,7 @@ ON PC
 
 WINDOW 1
 cd ws
+catkin_make
 source devel/setup.bash
 roslaunch fullpkg campf.launch
 

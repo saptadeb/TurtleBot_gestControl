@@ -32,11 +32,17 @@
 #include "std_msgs/Int32MultiArray.h"
 #include "fullpkg/mesg.h"
 
-#include <pcl/filters/crop_box.h>
+#include <pcl_ros/point_cloud.h>
+
+#include <pcl/filters/conditional_removal.h>
+ #include <pcl/visualization/cloud_viewer.h>
+
+/*TODO -- clear the sea of unused include files*/
 
 template class PFHShapeReco<pcl::PointXYZ>;
 
 ros::Publisher hist;
+ros::Publisher sc;
 
 std_msgs::Float32MultiArray msg;
 
@@ -51,13 +57,35 @@ void cloud_cb(const boost::shared_ptr<const sensor_msgs::PointCloud2>& input){
     
     pcl::VoxelGrid<pcl::PointXYZ> voxel_grid;
     voxel_grid.setInputCloud (cloud);
-    voxel_grid.setLeafSize (0.01, 0.01, 0.01);
+    voxel_grid.setLeafSize (0.01f, 0.01f, 0.01f);
     voxel_grid.filter(*smallcloud); 
 
+    //pcl::visualization::CloudViewer viewer ("Simple Cloud Viewer");
+    //viewer.showCloud (smallcloud);
+    //while (!viewer.wasStopped ())
+    //{
+    //}
+
+    sc.publish (smallcloud);
+
+    //can add a conditionalRemover filter here and save in boxcloud
+    /*
+    ///// build the condition
+    pcl::ConditionAnd<pcl::PointXYZ>::Ptr range_cond (new pcl::ConditionAnd<pcl::PointXYZ> ());
+    range_cond->addComparison (pcl::FieldComparison<pcl::PointXYZ>::ConstPtr (new pcl::FieldComparison<pcl::PointXYZ> ("z", pcl::ComparisonOps::GT, 0.10)));
+    range_cond->addComparison (pcl::FieldComparison<pcl::PointXYZ>::ConstPtr (new pcl::FieldComparison<pcl::PointXYZ> ("z", pcl::ComparisonOps::LT, 0.20)));
+
+    ///// build the filter
+    pcl::ConditionalRemoval<pcl::PointXYZ> condrem (range_cond);
+    condrem.setInputCloud (smallcloud);
+    condrem.setKeepOrganized(true);
+    condrem.filter (*boxcloud);
+    */
     msg.data.clear();
-    if(cloud->size() > 300) {        
-        ROS_INFO("small cloud size %lu", smallcloud->size());
-        ROS_INFO("boxcloud size %lu", boxcloud->size());
+
+    if(smallcloud->size() > 3) {        
+        //ROS_INFO("small cloud size %lu", smallcloud->size());
+        //ROS_INFO("boxcloud size %lu", boxcloud->size());
         pcl::search::KdTree<pcl::PointXYZ>::Ptr kdtree (new pcl::search::KdTree<pcl::PointXYZ>);
         pcl::NormalEstimation<pcl::PointXYZ, pcl::Normal> normal_estimation; 
         normal_estimation.setInputCloud (smallcloud);
@@ -66,7 +94,7 @@ void cloud_cb(const boost::shared_ptr<const sensor_msgs::PointCloud2>& input){
         normal_estimation.setRadiusSearch (0.03);  // maybe bigger?
         normal_estimation.compute (*normals);
         PFHShapeReco<pcl::PointXYZ> pfh;
-        pfh.ComputePFH(0.5, boxcloud, normals);
+        pfh.ComputePFH(0.5, smallcloud, normals);
         std::vector<long double> arr; 
         long double f = 0;
         for(int i = 0; i < 625; i++){
@@ -94,7 +122,8 @@ int main (int argc, char** argv)
 
   ros::Subscriber sub = nh.subscribe ("/softkinetic_camera/depth/points", 1000, cloud_cb);
 
-  hist = nh.advertise<std_msgs::Float32MultiArray>("arr", 10);
+  sc = nh.advertise<pcl::PointCloud<pcl::PointXYZ>> ("smallCloud", 1000);
+  hist = nh.advertise<std_msgs::Float32MultiArray>("arr", 1000);
 
   ros::spin ();
 }
