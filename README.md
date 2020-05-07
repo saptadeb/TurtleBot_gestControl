@@ -6,17 +6,21 @@ Research conducted at Hochschule Fulda, Germany, for the fulfillment of undergra
 - [Hardware Used](https://github.com/saptadeb/TurtleBot_gestControl#hardware-used)
 - [Running the code](https://github.com/saptadeb/TurtleBot_gestControl#running-the-code)
 - [Misc](https://github.com/saptadeb/TurtleBot_gestControl#misc)
+- [Videos]((https://github.com/saptadeb/TurtleBot_gestControl#videos))
+- [References]((https://github.com/saptadeb/TurtleBot_gestControl#references))
 
 
 ## Overview
 
+<div style="text-align: justify"> 
 This research presents a unique application of hand gestures in the robotics field, to control the movement of a mobile robot using hand gestures. It is carried out in two folds – a study on machine learning algorithms to detect four classes of hand gestures and an elaborate investigation on the implementation of Robot Operating System on the research platform, TurtleBot. The initial part of this thesis revolves around the study of both the areas and preliminary tests. In recent times, a lot of emphasis has been put on the use of Recurrent Neural Networks for applications which have a temporal dependency. A major advantage of using RNN is its ability to adapt its network with the influx of new incoming data.
+</div>
 
 ## Hardware Used
 
-- TurtleBot 2 - robot platform for this research
-- Orbecc Astra camera - onboard 3D sensor
-- Intel NUC - onboard computer
+- TurtleBot 2, the robot platform for this research
+- Orbecc Astra camera, onboard 3D sensor
+- Intel NUC,  onboard computer
 
 TurtleBot – Host PC Network Configuration:
 ![](/images/network-config.png)
@@ -52,6 +56,12 @@ Terminal 3
 - `roslaunch turtlebot_teleop key`
 
 ## Misc
+
+Check out the [final report](/report/final-report.pdf) for more information regarding the research.
+
+### Videos
+[Point-to-Point Autonomous Navigation](https://youtu.be/dKH0LBlqB9U)
+[Dynamic Obstacle Avoidance](https://youtu.be/YiR8dcKpKBU)
 
 ## References
 
