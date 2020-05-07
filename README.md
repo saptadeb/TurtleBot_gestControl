@@ -62,7 +62,7 @@ Check out the [final report](/report/final-report.pdf) for more information rega
 ### Videos
 [Point-to-Point Autonomous Navigation](https://youtu.be/dKH0LBlqB9U)
 
-[Dynamic Obstacle Avoidance](https://youtu.be/YiR8dcKpKBU)
+[Dynamic Obstacle Avoidance](https://youtu.be/lyR__Aati1U)
 
 ## References
 
