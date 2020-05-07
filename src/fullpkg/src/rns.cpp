@@ -35,7 +35,7 @@ using namespace std;
 /*
 TODO
 a check on gesture number, to prevent silly mistakes
-conditional filtering on z axis (understnading the different axes)
+conditional filtering on z axis (understanding the different axes)
 write a readme
 */
 
