@@ -1,3 +1,21 @@
+# HAND GESTURE CONTROL OF A ROBOT USING INTELLIGENT TECHNIQUES
+Research conducted at Hochschule Fulda, Germany, for the fulfillment of undergraduate thesis under the supervision of [Dr. Alexander Gepperth](https://www.hs-fulda.de/angewandte-informatik/ueber-uns/professuren/details/person/prof-dr-alexander-gepperth-1238/contactBox) and co-supervised by [Dr. V. Kalaichelvi](https://universe.bits-pilani.ac.in/dubai/kalaichelvi/profile).
+
+## Contents:
+- Overview
+- Robot Platform
+- Running the code
+- Misc
+
+
+## Overview
+## Robot Platform
+## Running the code
+## Misc
+
+
+
+
 changes in 
 /share/turtlebot_teleop/package.xml .... and
 /lib/turtlebot_teleop/turtlebot_teleop_key.py
