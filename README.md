@@ -6,8 +6,8 @@ Research conducted at Hochschule Fulda, Germany, for the fulfillment of undergra
 - [Hardware Used](https://github.com/saptadeb/TurtleBot_gestControl#hardware-used)
 - [Running the code](https://github.com/saptadeb/TurtleBot_gestControl#running-the-code)
 - [Misc](https://github.com/saptadeb/TurtleBot_gestControl#misc)
-- [Videos]((https://github.com/saptadeb/TurtleBot_gestControl#videos))
-- [References]((https://github.com/saptadeb/TurtleBot_gestControl#references))
+- [Videos](https://github.com/saptadeb/TurtleBot_gestControl#videos)
+- [References](https://github.com/saptadeb/TurtleBot_gestControl#references)
 
 
 ## Overview
@@ -61,6 +61,7 @@ Check out the [final report](/report/final-report.pdf) for more information rega
 
 ### Videos
 [Point-to-Point Autonomous Navigation](https://youtu.be/dKH0LBlqB9U)
+
 [Dynamic Obstacle Avoidance](https://youtu.be/YiR8dcKpKBU)
 
 ## References
