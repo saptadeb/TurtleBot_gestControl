@@ -1,3 +1,0 @@
-roslaunch fullpkg campf.launch
-roslaunch softkinetic_camera softkinetic_camera_demo.launch
-roslaunch softkinetic_camera softkinetic_cameraj.launch
