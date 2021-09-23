@@ -62,7 +62,8 @@ int main(){
   //change directory to ... testdata
   const char * home = hme.c_str();
   int h;
-  h = chdir(home);
+  // h = chdir(home);
+  chdir(home);
 
   int p;
   cout << "Enter person number (1-10): "; 

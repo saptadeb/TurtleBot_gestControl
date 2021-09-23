@@ -2,7 +2,7 @@
 
 import rospy
 from geometry_msgs.msg import Twist
-import sys, select, termios, tty
+# import sys, select, termios, tty
 from std_msgs.msg import String
 
 def move(keyb):
@@ -10,7 +10,7 @@ def move(keyb):
     th = 0
     status = 0
     count = 0
-    acc = 0.1
+    # acc = 0.1
     target_speed = 0
     target_turn = 0
     control_speed = 0
@@ -18,7 +18,7 @@ def move(keyb):
     speed = 1
     turn = 1
     key=keyb.data
-    print key
+    print(key)
 
     '''if (key=="i"):
         x=1
@@ -34,7 +34,7 @@ def move(keyb):
         th=0
 
     print x, th, count'''
-    
+
     moveBindings = {
             "i":(1,0),
             "j":(0,1),
@@ -55,7 +55,7 @@ def move(keyb):
         x = moveBindings[key][0]
         th = moveBindings[key][1]
         count = 0
-        print x, th, count
+        print (x, th, count)
     elif key in speedBindings.keys():
         speed = speed * speedBindings[key][0]
         turn = turn * speedBindings[key][1]
@@ -78,7 +78,7 @@ def move(keyb):
         #if (key == '\x03'):
         #    break
     
-    print x, th, count
+    print (x, th, count)
 
     target_speed = speed * x
     target_turn = turn * th
@@ -101,7 +101,7 @@ def move(keyb):
     twist.linear.x = control_speed; twist.linear.y = 0; twist.linear.z = 0
     twist.angular.x = 0; twist.angular.y = 0; twist.angular.z = control_turn
     pub.publish(twist)
-    print "after twist"
+    print ("after twist")
 
     #print("loop: {0}".format(count))
     #print("target: vx: {0}, wz: {1}".format(target_speed, target_turn))
