@@ -1,4 +1,7 @@
 # Hand Gesture Control of a Robot using Intelligent Techniques
+
+[![Codacy Badge](https://app.codacy.com/project/badge/Grade/17365b8a9f7c4ba8be4f167e57b02525)](https://www.codacy.com/gh/saptadeb/TurtleBot_gestControl/dashboard?utm_source=github.com&amp;utm_medium=referral&amp;utm_content=saptadeb/TurtleBot_gestControl&amp;utm_campaign=Badge_Grade)
+
 Research conducted at Hochschule Fulda, Germany, for the fulfillment of undergraduate thesis under the supervision of [Dr. Alexander Gepperth](https://www.hs-fulda.de/angewandte-informatik/ueber-uns/professuren/details/person/prof-dr-alexander-gepperth-1238/contactBox) and co-supervised by [Dr. V. Kalaichelvi](https://universe.bits-pilani.ac.in/dubai/kalaichelvi/profile).
 
 ## Contents:
